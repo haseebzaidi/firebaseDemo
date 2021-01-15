@@ -9,10 +9,10 @@ class ExploreFriendsSearch extends StatefulWidget {
 class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
   bool loader = false;
   String mssage = 'No data Found';
-  String search='';
+  String search = '';
 
   void searchMethod(String text) {
-    DatabaseReference db = FirebaseDatabase.instance.reference().child("Data");
+    DatabaseReference db = FirebaseDatabase.instance.reference().child("User");
     db
         .orderByChild("name")
         .equalTo(text)
@@ -31,24 +31,6 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
           loader = false;
         });
       }
-      // print(values["name"].toString());
-      //  if (values["name"] != null) {
-      //    return true;
-      //  } else {
-      //    return false;
-      //  }
-
-      // values.forEach((key,values) {
-      //   print(values["name"]);
-      //   if(values["name"] != null)
-      //     {
-      //       return true;
-      //     }
-      //   else
-      //     {
-      //       return false;
-      //     }
-      // });
     });
   }
 
@@ -136,7 +118,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                           borderRadius: BorderRadius.circular(20)),
                       child: TextFormField(
                         onChanged: (value) {
-                         search = value;
+                          search = value;
                         },
                         decoration: new InputDecoration(
                           hintText: 'Search Username',
@@ -165,15 +147,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                           color: Color(0xfff3c8c87)),
                       child: FlatButton(
                         onPressed: () {
-
                           searchMethod(search);
-// setState(() {
-//   loader = !loader;
-// });
-                          // print('haseeb')
-                          //     : print("no data");
-                          // Text("No data found",
-                          //         style: TextStyle(color: Colors.red));
                         },
                         child: Text(
                           'Search',
@@ -181,7 +155,6 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -192,8 +165,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                   ? Padding(
                       padding: const EdgeInsets.all(28.0),
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
@@ -201,8 +173,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                        color: Color(0xfff3c8c87),
-                                        width: 2)),
+                                        color: Color(0xfff3c8c87), width: 2)),
                                 child: ClipOval(
                                   child: Material(
                                     color: Colors.black,
@@ -224,8 +195,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                                 width: 10,
                               ),
                               Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(search),
                                   Text('Salam'),
@@ -237,8 +207,7 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                             decoration: BoxDecoration(
                               // shape: BoxShape.circle,
                               color: Color(0xfff3c8c87),
-                              borderRadius:
-                                  BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -246,19 +215,19 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
                                 children: [
                                   Text(
                                     'Add',
-                                    style: TextStyle(
-                                        color: Colors.white),
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  Icon(Icons.add,
-                                      color: Colors.white)
+                                  Icon(Icons.add, color: Colors.white)
                                 ],
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ):Container(child: Text(mssage),)
-
+                    )
+                  : Container(
+                      child: Text(mssage),
+                    )
             ],
           ),
         ),

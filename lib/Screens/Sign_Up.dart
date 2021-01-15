@@ -1,7 +1,7 @@
 import 'package:explore/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 class Sign_Up extends StatefulWidget {
   @override
   _Sign_UpState createState() => _Sign_UpState();
@@ -11,6 +11,12 @@ class _Sign_UpState extends State<Sign_Up> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String name;
+  DatabaseReference db = FirebaseDatabase.instance.reference();
+  void creatRecord(String name)
+  {
+    db.child("User").push().set({'name': name});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +51,10 @@ class _Sign_UpState extends State<Sign_Up> {
                     color: Color(0XFFf0f2f1),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: TextField(
+                      onChanged: (value){
+                        name = value;
+                      }
+                      ,
                         decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -138,6 +148,7 @@ class _Sign_UpState extends State<Sign_Up> {
               child: FlatButton(
                 // color: Color(0XFF507d60),
                 onPressed: () async {
+                  creatRecord(name);
                   try{
                     final newuser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
                     if(newuser != null)
