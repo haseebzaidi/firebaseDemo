@@ -21,6 +21,8 @@ class _ExploreFriendsSearchState extends State<ExploreFriendsSearch> {
       //  Map<dynamic, dynamic> values = snapshot.value;
 
       if (await snapshot.value != null) {
+        Map<dynamic, dynamic> values = snapshot.value;
+
         print("success");
         setState(() {
           loader = true;

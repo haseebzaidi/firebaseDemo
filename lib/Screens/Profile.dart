@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'explore.dart';
 
 class Profile extends StatefulWidget {
+  String name;
+  Profile(this.name);
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -55,7 +57,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     Center(
                       child: Text(
-                        'Sarah',
+                        widget.name,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,

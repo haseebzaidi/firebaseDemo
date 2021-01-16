@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'Profile.dart';
 import 'Sign_Up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 class Sign_In extends StatefulWidget {
   @override
   _Sign_InState createState() => _Sign_InState();
@@ -13,10 +15,49 @@ class Sign_In extends StatefulWidget {
 class _Sign_InState extends State<Sign_In> {
   String email;
   String pass;
+  String name;
+  String dbpassword;
   bool passGood = true;
+  bool loader = false;
 
-  final _auth = FirebaseAuth.instance;
+  void verify(String email, String password) {
+    DatabaseReference db = FirebaseDatabase.instance.reference().child("User");
+    db
+        .orderByChild("email")
+        .equalTo(email)
+        .once()
+        .then((DataSnapshot snapshot) async {
+      //  Map<dynamic, dynamic> values = snapshot.value;
 
+      if (await snapshot.value != null) {
+        Map<dynamic, dynamic> values = snapshot.value;
+        values.forEach((key, values) {
+          name = values["name"];
+          dbpassword =values["password"];
+          print(name);
+          print(dbpassword);
+        });
+       if(dbpassword == password) {
+          print("success");
+          setState(() {
+            loader = true;
+          });
+        }
+       else {
+         print("unsuccessP");
+         setState(() {
+           loader = false;
+         });
+       }
+      }
+      else {
+        print("unsuccessE");
+        setState(() {
+          loader = false;
+        });
+      }
+    });
+  }
 
   // FirebaseAuth loggedInUser = FirebaseAuth.instance;
 
@@ -107,6 +148,7 @@ class _Sign_InState extends State<Sign_In> {
                 child: TextField(
                     onChanged: (value) {
                       email = value;
+                      verify(email, pass);
                     },
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
@@ -125,6 +167,7 @@ class _Sign_InState extends State<Sign_In> {
                 child: TextField(
                     onChanged: (value) {
                       pass = value;
+                      verify(email, pass);
                     },
                     decoration: new InputDecoration(
                       suffixIcon: Padding(
@@ -188,24 +231,33 @@ class _Sign_InState extends State<Sign_In> {
                   ),
               child: FlatButton(
                 // color: Color(0XFF507d60),
-                onPressed: () async{
-                 try {
-                    final user = await _auth.signInWithEmailAndPassword(
-                        email: email, password: pass);
-                    if (user != null) {
-                      setState(() {
-                        passGood = true;
-                      });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Profile()),
-                      );
-                    }
-                  } catch (e) {
-                    setState(() {
-                      passGood = false;
-                    });
-                  }
+                onPressed: () async {
+                  loader
+                      ? setState(() {
+                          passGood = true;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Profile(name)));
+                        })
+                      : setState(() {
+                          passGood = false;
+                        });
+
+                  // try {
+                  //   final user = await _auth.signInWithEmailAndPassword(
+                  //       email: email, password: pass);
+                  //   if (user != null) {
+                  //     setState(() {
+                  //       passGood = true;
+                  //     });
+                  //
+                  //   }
+                  // } catch (e) {
+                  //   setState(() {
+                  //     passGood = false;
+                  //   });
+                  // }
                 },
                 child: Text(
                   "Log In",

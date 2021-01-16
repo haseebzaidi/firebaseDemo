@@ -61,7 +61,7 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Profile()),
+                                      builder: (context) => Profile('')),
                                 );
                               },
                               child: Icon(
@@ -558,17 +558,17 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
   //    //    return false;
   //    //  }
   //
-  //     // values.forEach((key,values) {
-  //     //   print(values["name"]);
-  //     //   if(values["name"] != null)
-  //     //     {
-  //     //       return true;
-  //     //     }
-  //     //   else
-  //     //     {
-  //     //       return false;
-  //     //     }
-  //     // });
+  //     values.forEach((key,values) {
+  //       print(values["name"]);
+  //       if(values["name"] != null)
+  //         {
+  //           return true;
+  //         }
+  //       else
+  //         {
+  //           return false;
+  //         }
+  //     });
   //   });
   // }
 }

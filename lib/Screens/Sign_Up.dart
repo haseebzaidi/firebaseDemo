@@ -2,6 +2,7 @@ import 'package:explore/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+
 class Sign_Up extends StatefulWidget {
   @override
   _Sign_UpState createState() => _Sign_UpState();
@@ -13,10 +14,14 @@ class _Sign_UpState extends State<Sign_Up> {
   String password;
   String name;
   DatabaseReference db = FirebaseDatabase.instance.reference();
-  void creatRecord(String name)
-  {
-    db.child("User").push().set({'name': name});
+
+  void creatRecord(String name, String email, String password) {
+    db
+        .child("User")
+        .push()
+        .set({'name': name, 'email': email, 'password': password});
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,18 +56,18 @@ class _Sign_UpState extends State<Sign_Up> {
                     color: Color(0XFFf0f2f1),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: TextField(
-                      onChanged: (value){
-                        name = value;
-                      }
-                      ,
+                        onChanged: (value) {
+                          name = value;
+                        },
                         decoration: new InputDecoration(
-                      border: new OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: new BorderSide(color: Colors.grey)),
-                      hintText: "First Name",
-                      hintStyle: TextStyle(
-                          color: Colors.grey, fontWeight: FontWeight.w800),
-                    )),
+                          border: new OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: new BorderSide(color: Colors.grey)),
+                          hintText: "First Name",
+                          hintStyle: TextStyle(
+                              color: Colors.grey, fontWeight: FontWeight.w800),
+                        )),
                   ),
                 ),
                 Padding(
@@ -88,16 +93,16 @@ class _Sign_UpState extends State<Sign_Up> {
               child: Container(
                 color: Color(0XFFf0f2f1),
                 child: TextField(
-                    decoration: new InputDecoration(
-                  border: new OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: new BorderSide(color: Colors.grey)),
-                  hintText: "Email",
-                  hintStyle: TextStyle(
-                      color: Colors.grey, fontWeight: FontWeight.w800),
-                ),
-                  onChanged: (value){
-                      email = value;
+                  decoration: new InputDecoration(
+                    border: new OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: new BorderSide(color: Colors.grey)),
+                    hintText: "Email",
+                    hintStyle: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w800),
+                  ),
+                  onChanged: (value) {
+                    email = value;
                   },
                 ),
               ),
@@ -107,24 +112,24 @@ class _Sign_UpState extends State<Sign_Up> {
               child: Container(
                 color: Color(0XFFf0f2f1),
                 child: TextField(
-                 // obscureText: true,
-                    decoration: new InputDecoration(
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Text('show',
-                        style: TextStyle(
-                          color: Color(0xfff3c8c87),
-                          fontWeight: FontWeight.w800,
-                        )),
+                  // obscureText: true,
+                  decoration: new InputDecoration(
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Text('show',
+                          style: TextStyle(
+                            color: Color(0xfff3c8c87),
+                            fontWeight: FontWeight.w800,
+                          )),
+                    ),
+                    border: new OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: new BorderSide(color: Colors.grey)),
+                    hintText: "Password",
+                    hintStyle: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w800),
                   ),
-                  border: new OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: new BorderSide(color: Colors.grey)),
-                  hintText: "Password",
-                  hintStyle: TextStyle(
-                      color: Colors.grey, fontWeight: FontWeight.w800),
-                ),
-                  onChanged: (value){
+                  onChanged: (value) {
                     password = value;
                   },
                 ),
@@ -147,25 +152,25 @@ class _Sign_UpState extends State<Sign_Up> {
                   ),
               child: FlatButton(
                 // color: Color(0XFF507d60),
-                onPressed: () async {
-                  creatRecord(name);
-                  try{
-                    final newuser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-                    if(newuser != null)
-                      {
-                        print(email);
-                        print(password);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Sign_In()),
-                        );
-                      }
-                  }
-                  catch (e)
-                  {
-                    print(e);
-                  }
-
+                onPressed: () {
+                  creatRecord(name, email, password);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Sign_In()),
+                  );
+                  // try {
+                  //   final newuser = await _auth
+                  //       .createUserWithEmailAndPassword(email: email,
+                  //       password: password);
+                  //   if (newuser != null) {
+                  //     print(email);
+                  //     print(password);
+                  //
+                  //   }
+                  // }
+                  // catch (e) {
+                  //   print(e);
+                  // }
                 },
                 child: Text(
                   "Sign Up",
