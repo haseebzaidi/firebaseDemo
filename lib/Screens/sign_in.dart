@@ -2,6 +2,7 @@ import 'package:explore/Screens/password.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'ExploreFirendsScreen.dart';
 import 'Profile.dart';
 import 'Sign_Up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,8 +40,10 @@ class _Sign_InState extends State<Sign_In> {
         });
        if(dbpassword == password) {
           print("success");
+
           setState(() {
             loader = true;
+
           });
         }
        else {

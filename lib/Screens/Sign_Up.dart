@@ -2,7 +2,7 @@ import 'package:explore/Screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import 'dart:math';
 class Sign_Up extends StatefulWidget {
   @override
   _Sign_UpState createState() => _Sign_UpState();
@@ -13,15 +13,20 @@ class _Sign_UpState extends State<Sign_Up> {
   String email;
   String password;
   String name;
+  List<String> fname = [];
   DatabaseReference db = FirebaseDatabase.instance.reference();
 
-  void creatRecord(String name, String email, String password) {
+  void creatRecord() {
     db
         .child("User")
         .push()
         .set({'name': name, 'email': email, 'password': password});
   }
+  random(){
+    var rn = new Random();
+    return print(1000 + rn.nextInt(2000 - 1000));
 
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +81,10 @@ class _Sign_UpState extends State<Sign_Up> {
                     color: Color(0XFFf0f2f1),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: TextField(
+                      onSubmitted: (val){
+                          fname.add(val);
+                          print(fname);
+                      },
                         decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -153,7 +162,8 @@ class _Sign_UpState extends State<Sign_Up> {
               child: FlatButton(
                 // color: Color(0XFF507d60),
                 onPressed: () {
-                  creatRecord(name, email, password);
+                  random();
+                  creatRecord();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Sign_In()),

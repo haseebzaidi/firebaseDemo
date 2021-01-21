@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'FriendScreen.dart';
 import 'explore.dart';
 
 class Profile extends StatefulWidget {
@@ -124,10 +125,10 @@ class _ProfileState extends State<Profile> {
                           // color: Color(0XFF507d60),
 
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) =>Sign_Up()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>FriendScreen(widget.name)),
+                            );
                           },
                           child: Text(
                             "Friends",
@@ -166,7 +167,7 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Explore()),
+                                  builder: (context) => Explore(widget.name)),
                             );
                           },
                           child: Text(

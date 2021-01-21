@@ -1,15 +1,44 @@
 import 'package:explore/Screens/ExploreFriendsSearch.dart';
+import 'package:explore/Screens/testing.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Profile.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class ExploreFriendsScreen extends StatefulWidget {
+  String Username;
+  ExploreFriendsScreen(this.Username);
   @override
   _ExploreFriendsScreenState createState() => _ExploreFriendsScreenState();
 }
 
 class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
+  String Selected_name;
+  List<String> list = [];
+  void frndlist() {
+    DatabaseReference dbf = FirebaseDatabase.instance.reference();
+    dbf
+        .child(widget.Username)
+        .push()
+        .set({'Fname': Selected_name,});
+  }
+  void getData() {
+    // list=[];
+    DatabaseReference db = FirebaseDatabase.instance.reference().child("User");
+    db.once().then((DataSnapshot snapshot) async {
+      Map<dynamic, dynamic> values = await snapshot.value;
+      values.forEach((key, values) => list.add(values["name"].toString()));
+      if (list != null) {
+        print(list);
+
+      }
+      setState(() {
+
+      });
+    });
+  }
+
   List<String> locations = [
     'Kuwait City',
     'Ahmadi',
@@ -21,6 +50,15 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
   String selectedLocation; // Option 2
   // String search;
   // bool loader = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    // list = []/;
+
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,14 +183,12 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
                     child: FlatButton(
                       onPressed: () {
                         // loader?
-                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ExploreFriendsSearch()),
-                              );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExploreFriendsSearch()),
+                        );
                         // print("hhhhh");
-
                       },
                       child: Text(
                         'Search',
@@ -192,383 +228,193 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
             Divider(
               thickness: 3,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color(0xfff3c8c87), width: 2)),
-                          child: ClipOval(
-                            child: Material(
-                              color: Colors.black,
+            ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: list.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return abc(list[index]);
+                }),
 
-                              // button color
-                              // splashColor: Colors.red, // inkwell color
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                child: Image.asset(
-                                  'assets/images/gg.jpeg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Container(
-                        //   width: 70,
-                        //   height: 70,
-                        //   decoration: BoxDecoration(
-                        //     shape: BoxShape.circle,
-                        //     color: Colors.green,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    Column(
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            // shape: BoxShape.circle,
-                            color: Color(0xfff3c8c87),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Add',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(Icons.add, color: Colors.white)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 30),
-                                  child: Text(
-                                    'Ahmed Yousaf',
-                                    style: TextStyle(color: Colors.blue),
-                                  )),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '40,000 steps',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/images/medal.png',
-                      scale: 1.5,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              thickness: 3,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color(0xfff3c8c87), width: 2)),
-                          child: ClipOval(
-                            child: Material(
-                              color: Colors.black,
-
-                              // button color
-                              // splashColor: Colors.red, // inkwell color
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                child: Image.asset(
-                                  'assets/images/gg.jpeg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Container(
-                        //   width: 70,
-                        //   height: 70,
-                        //   decoration: BoxDecoration(
-                        //     shape: BoxShape.circle,
-                        //     color: Colors.green,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    Column(
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            // shape: BoxShape.circle,
-                            color: Color(0xfff3c8c87),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Add',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(Icons.add, color: Colors.white)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 30),
-                                  child: Text(
-                                    'Ahmed Yousaf',
-                                    style: TextStyle(color: Colors.blue),
-                                  )),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '40,000 steps',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/images/medal.png',
-                      scale: 1.5,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              thickness: 3,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: Color(0xfff3c8c87), width: 2)),
-                          child: ClipOval(
-                            child: Material(
-                              color: Colors.black,
-
-                              // button color
-                              // splashColor: Colors.red, // inkwell color
-                              child: Container(
-                                width: 80,
-                                height: 80,
-                                child: Image.asset(
-                                  'assets/images/gg.jpeg',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Container(
-                        //   width: 70,
-                        //   height: 70,
-                        //   decoration: BoxDecoration(
-                        //     shape: BoxShape.circle,
-                        //     color: Colors.green,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    Column(
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            // shape: BoxShape.circle,
-                            color: Color(0xfff3c8c87),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Add',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(Icons.add, color: Colors.white)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(left: 30),
-                                  child: Text(
-                                    'Ahmed Yousaf',
-                                    style: TextStyle(color: Colors.blue),
-                                  )),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '40,000 steps',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 25),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image.asset(
-                      'assets/images/medal.png',
-                      scale: 1.5,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              thickness: 3,
-            ),
           ],
         ),
       )),
     );
   }
 
-  // bool searchMethod(String text) {
-  //   DatabaseReference db = FirebaseDatabase.instance.reference().child("Data");
-  //   db.orderByChild("name").equalTo(text).once().then((DataSnapshot snapshot) async {
-  //   //  Map<dynamic, dynamic> values = snapshot.value;
-  //
-  //     if( await snapshot.value != null )
-  //     {
-  //       print("success");
-  //       loader = true;
-  //
-  //     }
-  //     else
-  //     {
-  //       print("unsuccess");
-  //       loader =  false;
-  //
-  //     }
-  //     // print(values["name"].toString());
-  //    //  if (values["name"] != null) {
-  //    //    return true;
-  //    //  } else {
-  //    //    return false;
-  //    //  }
-  //
-  //     values.forEach((key,values) {
-  //       print(values["name"]);
-  //       if(values["name"] != null)
-  //         {
-  //           return true;
-  //         }
-  //       else
-  //         {
-  //           return false;
-  //         }
-  //     });
-  //   });
-  // }
+  Widget abc(String list){
+    bool btn = false;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: Color(0xfff3c8c87), width: 2)),
+                      child: ClipOval(
+                        child: Material(
+                          color: Colors.black,
+
+                          // button color
+                          // splashColor: Colors.red, // inkwell color
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            child: Image.asset(
+                              'assets/images/gg.jpeg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Container(
+                    //   width: 70,
+                    //   height: 70,
+                    //   decoration: BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     color: Colors.green,
+                    //   ),
+                    // ),
+                  ],
+                ),
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.end,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        // shape: BoxShape.circle,
+                        color: Color(0xfff3c8c87),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            print(btn.toString());
+
+                              btn = !btn;
+                              print(btn.toString());
+
+                            Selected_name = list;
+                            frndlist();
+                            print(Selected_name);
+                            print(widget.Username);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => testing(widget.Username)),
+                            // );
+
+                          },
+                          child: btn?Icon(Icons.check): Row(
+                            children: [
+                                Text(
+                                'Add',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(Icons.add, color: Colors.white)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(left: 30),
+                              child: Text(
+                                list,
+                                style: TextStyle(color: Colors.blue),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '40,000 steps',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 25),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Image.asset(
+                  'assets/images/medal.png',
+                  scale: 1.5,
+                )
+              ],
+            ),
+          ),
+        ),
+        Divider(
+          thickness: 3,
+        ),
+      ],
+    );
+  }
+// bool searchMethod(String text) {
+//   DatabaseReference db = FirebaseDatabase.instance.reference().child("Data");
+//   db.orderByChild("name").equalTo(text).once().then((DataSnapshot snapshot) async {
+//   //  Map<dynamic, dynamic> values = snapshot.value;
+//
+//     if( await snapshot.value != null )
+//     {
+//       print("success");
+//       loader = true;
+//
+//     }
+//     else
+//     {
+//       print("unsuccess");
+//       loader =  false;
+//
+//     }
+//     // print(values["name"].toString());
+//    //  if (values["name"] != null) {
+//    //    return true;
+//    //  } else {
+//    //    return false;
+//    //  }
+//
+//     values.forEach((key,values) {
+//       print(values["name"]);
+//       if(values["name"] != null)
+//         {
+//           return true;
+//         }
+//       else
+//         {
+//           return false;
+//         }
+//     });
+//   });
+// }
 }

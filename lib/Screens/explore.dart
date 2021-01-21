@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class Explore extends StatefulWidget {
   @override
+  String username;
+  Explore(this.username);
   _ExploreState createState() => _ExploreState();
 }
 
@@ -116,7 +118,7 @@ class _ExploreState extends State<Explore> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ExploreFriendsScreen()),
+                                  builder: (context) => ExploreFriendsScreen(widget.username)),
                             );
                           },
                           child: Text(
