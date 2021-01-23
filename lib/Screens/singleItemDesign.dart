@@ -19,20 +19,23 @@ class _SingleItemDesignState extends State<SingleItemDesign> {
     // list=[];
     DatabaseReference db = FirebaseDatabase.instance.reference().child(widget.username);
     db.once().then((DataSnapshot snapshot) async {
-      Map<dynamic, dynamic> values = await snapshot.value;
+      if (await snapshot.value != null)
+       { Map<dynamic, dynamic> values = await snapshot.value;
       values.forEach((key, values) => list.add(values["Fname"].toString()));
       if (list.contains(Selected_name)) {
-
-        print("Same");
-
+        print("SAME");
       }
-      else{
+      else {
         frndlist();
-        setState(() {
-
-        });
       }
+    }
+      else
+        {
+          frndlist();
+        }
+      setState(() {
 
+      });
     });
   }
   void frndlist() {
@@ -42,6 +45,7 @@ class _SingleItemDesignState extends State<SingleItemDesign> {
         .push()
         .set({'Fname': Selected_name,});
   }
+  @override
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -106,10 +110,12 @@ class _SingleItemDesignState extends State<SingleItemDesign> {
                           onTap: () {
                             setState(() {
                              btn = true;
+                             Selected_name = widget.name;
                             });
-                            //change(btn);
-                            Selected_name = widget.name;
-                            getDataforverify();
+                            //change(btn)
+
+                              getDataforverify();
+
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
