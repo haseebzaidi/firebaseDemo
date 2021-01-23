@@ -9,11 +9,9 @@ class Sign_Up extends StatefulWidget {
 }
 
 class _Sign_UpState extends State<Sign_Up> {
-  final _auth = FirebaseAuth.instance;
   String email;
   String password;
   String name;
-  List<String> fname = [];
   DatabaseReference db = FirebaseDatabase.instance.reference();
 
   void creatRecord() {
@@ -81,10 +79,6 @@ class _Sign_UpState extends State<Sign_Up> {
                     color: Color(0XFFf0f2f1),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: TextField(
-                      onSubmitted: (val){
-                          fname.add(val);
-                          print(fname);
-                      },
                         decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),

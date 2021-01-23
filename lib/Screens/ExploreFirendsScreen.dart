@@ -1,4 +1,5 @@
 import 'package:explore/Screens/ExploreFriendsSearch.dart';
+import 'package:explore/Screens/singleItemDesign.dart';
 import 'package:explore/Screens/testing.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,13 @@ class ExploreFriendsScreen extends StatefulWidget {
 class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
   String Selected_name;
   List<String> list = [];
-  void frndlist() {
-    DatabaseReference dbf = FirebaseDatabase.instance.reference();
-    dbf
-        .child(widget.Username)
-        .push()
-        .set({'Fname': Selected_name,});
-  }
+  // void frndlist() {
+  //   DatabaseReference dbf = FirebaseDatabase.instance.reference();
+  //   dbf
+  //       .child(widget.Username)
+  //       .push()
+  //       .set({'Fname': Selected_name,});
+  // }
   void getData() {
     // list=[];
     DatabaseReference db = FirebaseDatabase.instance.reference().child("User");
@@ -30,6 +31,7 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
       Map<dynamic, dynamic> values = await snapshot.value;
       values.forEach((key, values) => list.add(values["name"].toString()));
       if (list != null) {
+        list.remove(widget.Username);
         print(list);
 
       }
@@ -58,7 +60,7 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
     super.initState();
     getData();
   }
-
+bool btn = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -233,7 +235,7 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: list.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return abc(list[index]);
+                  return SingleItemDesign(list[index],widget.Username);
                 }),
 
           ],
@@ -242,8 +244,8 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
     );
   }
 
-  Widget abc(String list){
-    bool btn = false;
+  Widget abc(BuildContext context , String list , bool btn){
+   // bool btn = false;
     return Column(
       children: [
         Padding(
@@ -304,15 +306,10 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: () {
-                            print(btn.toString());
 
-                              btn = !btn;
-                              print(btn.toString());
-
-                            Selected_name = list;
-                            frndlist();
-                            print(Selected_name);
-                            print(widget.Username);
+                           change(btn);
+                           Selected_name = list;
+                            // frndlist();
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
@@ -320,7 +317,7 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
                             // );
 
                           },
-                          child: btn?Icon(Icons.check): Row(
+                          child: btn ? Icon(Icons.check): Row(
                             children: [
                                 Text(
                                 'Add',
@@ -379,6 +376,19 @@ class _ExploreFriendsScreenState extends State<ExploreFriendsScreen> {
         ),
       ],
     );
+  }
+
+  void change(bool btn) {
+    print(btn.toString());
+    setState(() {
+      btn = true;
+    });
+    print(btn.toString());
+    print(Selected_name);
+    print(widget.Username);
+    setState(() {
+
+    });
   }
 // bool searchMethod(String text) {
 //   DatabaseReference db = FirebaseDatabase.instance.reference().child("Data");

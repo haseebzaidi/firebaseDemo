@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -13,7 +14,6 @@ class FriendScreen extends StatefulWidget {
 class _FriendScreenState extends State<FriendScreen> {
   List<String> listallname = [];
   List<String> list = [];
-
   void getallnames() {
     // list=[];
     DatabaseReference db = FirebaseDatabase.instance.reference().child("User");
@@ -29,6 +29,7 @@ class _FriendScreenState extends State<FriendScreen> {
       setState(() {});
     });
   }
+
   void getfriendsData() {
     // list=[];
     DatabaseReference db =
@@ -38,38 +39,30 @@ class _FriendScreenState extends State<FriendScreen> {
       values.forEach((key, values) => list.add(values["Fname"].toString()));
       if (list != null) {
         print(list);
-
       }
       setState(() {});
     });
   }
-
   void finallist() {
     for (int i = 0; i < listallname.length; i++) {
       print(listallname[i].toString());
       DatabaseReference db = FirebaseDatabase.instance.reference();
-      db.child(listallname[i].toString())
+      db
+          .child(listallname[i].toString())
           .orderByChild("Fname")
           .equalTo(widget.username)
           .once()
           .then((DataSnapshot snapshot) async {
         if (await snapshot.value != null) {
-          //for(int j = 0; j < list.length ; j++ ){
-           // if(list[j].toString() == listallname[i].toString())
-              if(list.any((item) => listallname.contains(item)))
-              {
-                print("same");
-              }
-            else
-              {
-                db.child(widget.username).push().set({
-                  'Fname': listallname[i],
-                });
-                list.add(listallname[i].toString());
-                print(list);
-              }
-        //  }
-
+          if (list.contains(listallname[i])) {
+            print("same");
+          } else {
+            db.child(widget.username).push().set({
+              'Fname': listallname[i],
+            });
+            list.add(listallname[i].toString());
+            print(list);
+          }
         } else {
           print("cant find");
         }
